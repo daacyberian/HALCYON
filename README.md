@@ -82,6 +82,3 @@ Frontend runs on http://localhost:5173 (default Vite port)
 - Order checkout
 - Exchange & return requests
 
-## License
-
-ISC
