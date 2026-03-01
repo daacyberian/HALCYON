@@ -1,4 +1,4 @@
-# ![HALCYON](HALCYON-Frontend/bird.png) HALCYON
+# <img src="HALCYON-Frontend/bird.png" width="40" /> HALCYON
 
 A full-stack e-commerce web application with a React frontend and Node.js/Express backend.
 
