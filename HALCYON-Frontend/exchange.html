@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Exchange - HALCYON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-content { padding-top: calc(var(--navbar-height) + 2rem); min-height: 100vh; background: var(--color-bg); }
+        .page-container { max-width: 600px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+        .page-card { background: var(--color-surface); border-radius: var(--radius-xl); padding: 2.5rem; box-shadow: var(--shadow-sm); }
+        .page-title { font-size: 1.75rem; font-weight: 600; color: var(--color-text); margin-bottom: 2rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-text); }
+        .form-select, .form-textarea { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 0.9375rem; }
+        .form-textarea { min-height: 100px; resize: vertical; }
+        .msg { margin-top: 1rem; font-weight: 500; }
+        .msg.success { color: var(--color-success); }
+        .msg.error { color: var(--color-error); }
+        .exchange-list { margin-top: 2.5rem; }
+        .section-subtitle { font-size: 1.25rem; font-weight: 600; color: var(--color-text); margin-bottom: 1rem; }
+        .exchange-item { background: var(--color-bg-alt); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1rem; }
+        .exchange-status { font-weight: 600; margin-top: 0.5rem; }
+        .status-pending { color: var(--color-warning); }
+        .status-approved { color: var(--color-success); }
+        .status-rejected { color: var(--color-error); }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="index.html" class="navbar-brand">
+                <img src="bird.png" alt="HALCYON">
+                <span class="navbar-brand-text">HALCYON</span>
+            </a>
+            <div class="navbar-actions">
+                <a href="index.html" class="btn btn-secondary">Back to Store</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="page-container">
+            <div class="page-card">
+                <h1 class="page-title">Request Product Exchange</h1>
+                <div>
+                    <label class="form-label" for="orderItemSelect">Select Product/Order</label>
+                    <select id="orderItemSelect" class="form-select"></select>
+                </div>
+                <div>
+                    <label class="form-label" for="exchangeReason">Reason for Exchange</label>
+                    <textarea id="exchangeReason" class="form-textarea" placeholder="Describe the reason for exchange..."></textarea>
+                </div>
+                <button id="submitExchangeBtn" class="btn btn-primary">Submit Exchange Request</button>
+                <div class="msg" id="exchangeMsg"></div>
+                <div class="exchange-list">
+                    <h2 class="section-subtitle">Your Previous Exchange Requests</h2>
+                    <div id="exchangeRequests"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+    // Helper to get current user
+    function getCurrentUser() {
+        const stored = localStorage.getItem('currentUser');
+        return stored ? JSON.parse(stored) : null;
+    }
+    const user = getCurrentUser();
+    if (!user) {
+        document.querySelector('.container').innerHTML = '<div class="msg" style="color:#e74c3c;">Please log in to request an exchange.</div>';
+    } else {
+        loadOrderItems();
+        loadExchangeRequests();
+    }
+    async function loadOrderItems() {
+        const res = await fetch(`https://ecom-backend-alpha-rust.vercel.app/orderitems/by-customer?email=${encodeURIComponent(user.Email)}`);
+        const items = res.ok ? await res.json() : [];
+        const select = document.getElementById('orderItemSelect');
+        if (!items.length) {
+            select.innerHTML = '<option>No orders found</option>';
+            document.getElementById('submitExchangeBtn').disabled = true;
+            return;
+        }
+        select.innerHTML = items.map(item => `<option value="${item.OrderItemID}|${item.ProductID}">${item.ProductName} (Qty: ${item.Quantity})</option>`).join('');
+    }
+    document.getElementById('submitExchangeBtn').onclick = async function() {
+        const [orderItemId, productId] = document.getElementById('orderItemSelect').value.split('|');
+        const reason = document.getElementById('exchangeReason').value.trim();
+        if (!orderItemId || !productId || !reason) {
+            document.getElementById('exchangeMsg').textContent = 'Please select a product and enter a reason.';
+            document.getElementById('exchangeMsg').style.color = '#e74c3c';
+            return;
+        }
+        const res = await fetch('https://ecom-backend-alpha-rust.vercel.app/exchange/request', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderItemId, productId, reason, customerId: user.CustomerID })
+        });
+        const data = await res.json();
+        document.getElementById('exchangeMsg').textContent = data.message || data.error;
+        document.getElementById('exchangeMsg').style.color = data.message ? '#1a1a1a' : '#e74c3c';
+        if (data.message) {
+            document.getElementById('exchangeReason').value = '';
+            loadExchangeRequests();
+        }
+    };
+    async function loadExchangeRequests() {
+        const res = await fetch(`https://ecom-backend-alpha-rust.vercel.app/exchange/by-customer?customerId=${user.CustomerID}`);
+        const requests = res.ok ? await res.json() : [];
+        const list = document.getElementById('exchangeRequests');
+        if (!requests.length) {
+            list.innerHTML = '<p>No previous exchange requests.</p>';
+            return;
+        }
+        list.innerHTML = requests.map(r => `
+            <div class="exchange-item">
+                <div><b>Product:</b> ${r.ProductName || r.ProductID}</div>
+                <div><b>Reason:</b> ${r.ExchangeReason}</div>
+                <div><b>Date:</b> ${r.ExchangeDate || ''}</div>
+                <div class="exchange-status status-${r.Status.toLowerCase()}"><b>Status:</b> ${r.Status}</div>
+            </div>
+        `).join('');
+    }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FAQ - HALCYON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-content { padding-top: calc(var(--navbar-height) + 2rem); min-height: 100vh; background: var(--color-bg); }
+        .page-container { max-width: 800px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+        .page-card { background: var(--color-surface); border-radius: var(--radius-xl); padding: 2.5rem; box-shadow: var(--shadow-sm); }
+        .page-title { font-size: 2rem; font-weight: 600; color: var(--color-text); margin-bottom: 2rem; }
+        .faq-item { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-border-light); }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-question { font-weight: 600; color: var(--color-text); margin-bottom: 0.75rem; font-size: 1.1rem; }
+        .faq-answer { color: var(--color-text-secondary); line-height: 1.7; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="index.html" class="navbar-brand">
+                <img src="bird.png" alt="HALCYON">
+                <span class="navbar-brand-text">HALCYON</span>
+            </a>
+            <div class="navbar-actions">
+                <a href="index.html" class="btn btn-secondary">Back to Store</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="page-container">
+            <div class="page-card">
+                <h1 class="page-title">Frequently Asked Questions</h1>
+                <div class="faq-item">
+                    <div class="faq-question">How do I place an order?</div>
+                    <div class="faq-answer">Browse products, add them to your cart, and proceed to checkout. It's that simple!</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What payment methods are accepted?</div>
+                    <div class="faq-answer">We accept all major credit/debit cards, PayPal, and cash on delivery for your convenience.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How can I track my order?</div>
+                    <div class="faq-answer">Go to your dashboard and view your recent orders for tracking information and status updates.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What is your return policy?</div>
+                    <div class="faq-answer">We offer a 30-day return policy for all eligible items. Visit our Returns page for more details.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How do I contact support?</div>
+                    <div class="faq-answer">Email us at support@halcyon.com or use the live chat on our website.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html> 

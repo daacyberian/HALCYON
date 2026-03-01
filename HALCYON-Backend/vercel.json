@@ -1,0 +1,88 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/auth(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/admin(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/cart(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/wishlist(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/order(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/loyalty(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/discount(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/customersupport(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/blogs(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/product(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/category(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/subcategory(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/reviews(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/orderitems(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/returns(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/exchange(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/return(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "$1"
+    }
+  ]
+}
+ 

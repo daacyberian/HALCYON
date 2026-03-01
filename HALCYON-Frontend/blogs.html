@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - HALCYON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-content { padding-top: calc(var(--navbar-height) + 2rem); min-height: 100vh; background: var(--color-bg); }
+        .page-container { max-width: var(--container-max); margin: 0 auto; padding: 2rem 2rem 4rem; }
+        .page-title { font-size: 2rem; font-weight: 600; color: var(--color-text); margin-bottom: 2rem; }
+        .blog-card { background: var(--color-surface); border-radius: var(--radius-lg); overflow: hidden; transition: all var(--transition-base); border: 1px solid var(--color-border-light); }
+        .blog-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .blog-image { width: 100%; height: 200px; object-fit: cover; }
+        .blog-content { padding: 1.5rem; }
+        .blog-title { font-size: 1.25rem; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem; }
+        .blog-meta { display: flex; gap: 1rem; color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: 1rem; }
+        .blog-excerpt { color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 1rem; }
+        .search-input { padding: 0.75rem 1.25rem; width: 100%; max-width: 400px; border: 1px solid var(--color-border); border-radius: var(--radius-full); font-size: 0.9375rem; background: var(--color-surface); }
+        .search-input:focus { border-color: var(--color-primary); outline: none; }
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            background: #1a1a1a;
+        }
+
+        .cart:hover {
+            background: #1a1a1a;
+        }
+
+        .login-btn:hover {
+            background: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-excerpt {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .read-more {
+            display: inline-block;
+            background: #1a1a1a;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            background: #1a1a1a;
+        }
+
+        .search-container {
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 0.8rem 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #1a1a1a;
+        }
+
+        .category-nav {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            overflow-x: auto;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .category-nav button {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            color: black;
+        }
+
+        .category-nav button.active {
+            background: #1a1a1a;
+            color: white;
+            border-color: #1a1a1a;
+        }
+
+        .category-nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .floating-support-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: #1a1a1a;
+            color: #fff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 16px rgba(52,152,219,0.2);
+            z-index: 2000;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .floating-support-btn:hover {
+            background: #1a1a1a;
+            box-shadow: 0 6px 24px rgba(52,152,219,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-input {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="index.html" class="navbar-brand">
+                <img src="bird.png" alt="HALCYON">
+                <span class="navbar-brand-text">HALCYON</span>
+            </a>
+            <div class="navbar-actions">
+                <a href="index.html" class="btn btn-secondary">Back to Store</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="page-container">
+            <h1 class="page-title">Our Blog</h1>
+            <div style="margin-bottom:2rem;">
+                <input type="text" class="search-input" placeholder="Search blogs..." id="blogSearch" oninput="handleSearch(event)">
+            >
+        </div>
+
+        <div class="category-nav" id="categoryNav">
+            <button class="active" onclick="filterBlogs('all')">All Blogs</button>
+            <button onclick="filterBlogs('fashion')">Fashion</button>
+            <button onclick="filterBlogs('lifestyle')">Lifestyle</button>
+            <button onclick="filterBlogs('trends')">Trends</button>
+            <button onclick="filterBlogs('tips')">Tips & Tricks</button>
+        </div>
+
+        <div class="blog-grid" id="blogGrid">
+            <!-- Blog cards will be added here dynamically -->
+        </div>
+    </div>
+
+    <a href="customersupport.html" class="floating-support-btn" title="Customer Support">
+        💬
+    </a>
+
+    <script>
+        let blogs = [
+            {
+                id: 1,
+                title: "The Latest Fashion Trends for 2024",
+                category: "fashion",
+                date: "March 15, 2024",
+                author: "Sarah Johnson",
+                image: "https://picsum.photos/seed/blog1/800/400",
+                excerpt: "Discover the hottest fashion trends that will dominate 2024. From sustainable fashion to bold patterns, we've got you covered.",
+                content: "Full blog content here..."
+            },
+            {
+                id: 2,
+                title: "Sustainable Living: A Complete Guide",
+                category: "lifestyle",
+                date: "March 10, 2024",
+                author: "Michael Chen",
+                image: "https://picsum.photos/seed/blog2/800/400",
+                excerpt: "Learn how to incorporate sustainable practices into your daily life and make a positive impact on the environment.",
+                content: "Full blog content here..."
+            },
+            {
+                id: 3,
+                title: "Top 10 Shopping Tips for Smart Buyers",
+                category: "tips",
+                date: "March 5, 2024",
+                author: "Emily Davis",
+                image: "https://picsum.photos/seed/blog3/800/400",
+                excerpt: "Master the art of smart shopping with these expert tips that will help you save money and make better purchasing decisions.",
+                content: "Full blog content here..."
+            },
+            {
+                id: 4,
+                title: "Spring Collection Preview",
+                category: "fashion",
+                date: "March 1, 2024",
+                author: "David Wilson",
+                image: "https://picsum.photos/seed/blog4/800/400",
+                excerpt: "Get a first look at our upcoming spring collection and learn how to style these pieces for the perfect spring wardrobe.",
+                content: "Full blog content here..."
+            }
+        ];
+
+        let currentCategory = 'all';
+
+        function displayBlogs(blogsToShow) {
+            const blogGrid = document.getElementById('blogGrid');
+            blogGrid.innerHTML = blogsToShow.map(blog => `
+                <div class="blog-card">
+                    <img src="${blog.image}" alt="${blog.title}" class="blog-image">
+                    <div class="blog-content">
+                        <h2 class="blog-title">${blog.title}</h2>
+                        <div class="blog-meta">
+                            <span>${blog.date}</span>
+                            <span>By ${blog.author}</span>
+                        </div>
+                        <p class="blog-excerpt">${blog.excerpt}</p>
+                        <a href="blog-detail.html?id=${blog.id}" class="read-more">Read More</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterBlogs(category) {
+            currentCategory = category;
+            const buttons = document.querySelectorAll('.category-nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent.toLowerCase() === category || 
+                    (category === 'all' && button.textContent === 'All Blogs')) {
+                    button.classList.add('active');
+                }
+            });
+
+            const filteredBlogs = category === 'all' 
+                ? blogs 
+                : blogs.filter(blog => blog.category === category);
+            
+            displayBlogs(filteredBlogs);
+        }
+
+        function handleSearch(event) {
+            const searchTerm = event.target.value.toLowerCase().trim();
+            const filteredBlogs = blogs.filter(blog => {
+                if (currentCategory !== 'all' && blog.category !== currentCategory) {
+                    return false;
+                }
+                return blog.title.toLowerCase().includes(searchTerm) || 
+                       blog.excerpt.toLowerCase().includes(searchTerm) ||
+                       blog.author.toLowerCase().includes(searchTerm);
+            });
+            displayBlogs(filteredBlogs);
+        }
+
+        // Initialize the page
+        window.onload = () => {
+            displayBlogs(blogs);
+        };
+    </script>
+    </main>
+</body>
+</html> 

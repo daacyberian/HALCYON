@@ -1,0 +1,2545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HALCYON - Premium Fashion Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background: #ffffff;
+            color: #333;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 7px;
+            font-size: 0.8rem;
+        }
+
+        .cart, .login-btn {
+            background: #1a1a1a;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .login-btn {
+            background: #1a1a1a;
+        }
+
+        .cart:hover {
+            background: #1a1a1a;
+        }
+
+        .login-btn:hover {
+            background: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-container {
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 0.8rem 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #1a1a1a;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .product {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            padding: 1.5rem;
+            margin: 1rem auto;
+            max-width: 600px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .product p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .product .price {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+
+        button {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            cursor: pointer;
+            border-radius: 25px;
+            width: 100%;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #1a1a1a;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            padding: 1rem;
+            background: #fde8e8;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .cart-content {
+            background: var(--color-surface);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            width: 95%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .cart-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-border-light);
+            font-size: 0.9375rem;
+        }
+
+        .cart-checkbox {
+            accent-color: var(--color-primary);
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .cart-item-img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border-light);
+        }
+
+        .cart-item-name {
+            flex: 1;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        .cart-item-qty {
+            min-width: 48px;
+            text-align: center;
+        }
+
+        .cart-item-price {
+            min-width: 80px;
+            text-align: right;
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .remove-cart-btn {
+            background: var(--color-bg-alt);
+            color: var(--color-error);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 0.375rem 0.75rem;
+            cursor: pointer;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+            transition: all var(--transition-fast);
+        }
+
+        .remove-cart-btn:hover {
+            background: var(--color-error);
+            color: white;
+        }
+
+        .remove-cart-btn:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .cart-total {
+            margin-top: 1.5rem;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--color-text);
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: var(--color-text-muted);
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .search-input {
+                width: 90%;
+            }
+        }
+
+        .featured-products {
+            margin: 2rem 0;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-details {
+            padding: 1.5rem;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
+        .category-section {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #1a1a1a;
+        }
+
+        .subcategory-section {
+            margin: 1.5rem 0;
+        }
+
+        .subcategory-title {
+            font-size: 1.4rem;
+            color: #34495e;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            border-left: 4px solid #1a1a1a;
+        }
+
+        .category-nav {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            overflow-x: auto;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .category-nav button {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            color: black;
+        }
+
+        .category-nav button.active {
+            background: #1a1a1a;
+            color: white;
+            border-color: #1a1a1a;
+        }
+
+        .category-nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .subcategory-section {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .subcategory-title {
+            font-size: 1.4rem;
+            color: #34495e;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 4px solid #1a1a1a;
+            background: white;
+            padding: 0.8rem 1rem;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .category-section {
+            margin: 2.5rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .category-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-nav {
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .category-nav button {
+            padding: 0.8rem 1.5rem;
+            margin: 0.5rem;
+            background: white;
+            color: black;
+            border: 2px solid #1a1a1a;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .category-nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .category-nav button.active {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        /* Login Modal Styles */
+        .login-modal,
+        .register-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .login-content {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 360px;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .login-content h2 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            color: var(--color-text);
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 0.875rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.375rem;
+            color: var(--color-text);
+            font-weight: 500;
+            font-size: 0.8125rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-size: 0.9375rem;
+            transition: border-color var(--transition-fast);
+            background: var(--color-surface);
+        }
+
+        .form-group input:focus {
+            border-color: var(--color-primary);
+            outline: none;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .login-submit, .cancel-btn {
+            flex: 1;
+            padding: 0.625rem;
+            border: none;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            transition: all var(--transition-fast);
+        }
+
+        .login-submit {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .cancel-btn {
+            background: var(--color-bg-alt);
+            color: var(--color-text-secondary);
+        }
+
+        .login-submit:hover {
+            background: var(--color-primary-dark);
+        }
+
+        .cancel-btn:hover {
+            background: var(--color-border);
+        }
+
+        .register-link {
+            margin-top: 1rem;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.8125rem;
+        }
+
+        .register-link a {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Notifications dropdown */
+        .notifications-dropdown {
+            display: none;
+            position: absolute;
+            right: 2rem;
+            top: 4.5rem;
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            min-width: 280px;
+            z-index: 1001;
+        }
+
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border-light);
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .wishlist-btn {
+            background: #fff;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+            border-radius: 25px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .wishlist-btn:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .wishlist-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center; align-items: center;
+            z-index: 1002;
+        }
+
+        .wishlist-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .close-wishlist-btn {
+            margin-top: 1rem;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+        }
+
+        .faq-btn {
+            background: #fff;
+            color: #1a1a1a;
+            border: 1px solid #1a1a1a;
+            border-radius: 25px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .faq-btn:hover {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .wishlist-icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #e74c3c;
+            margin-right: 0.5rem;
+        }
+
+        .user-menu-trigger {
+            cursor: pointer;
+        }
+
+        .floating-support-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: #1a1a1a;
+            color: #fff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 16px rgba(52,152,219,0.2);
+            z-index: 2000;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+        .floating-support-btn:hover {
+            background: #1a1a1a;
+            box-shadow: 0 6px 24px rgba(52,152,219,0.3);
+        }
+        @media (max-width: 600px) {
+            .floating-support-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+
+        .register-modal .login-content {
+            max-width: 340px;
+            width: 95%;
+            padding: 1.25rem 1.5rem;
+        }
+        .register-modal .login-content h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .register-modal .form-group {
+            margin-bottom: 0.625rem;
+        }
+        .register-modal .form-group label {
+            font-size: 0.8125rem;
+            margin-bottom: 0.25rem;
+        }
+        .register-modal .form-group input {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        .register-modal .form-buttons {
+            margin-top: 1rem;
+        }
+        .register-modal .login-submit, .register-modal .cancel-btn {
+            padding: 0.625rem;
+            font-size: 0.875rem;
+        }
+        .register-modal .register-link {
+            margin-top: 1rem;
+            font-size: 0.8125rem;
+        }
+
+        .blogs-section {
+            margin: 2.5rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .blogs-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .blogs-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 0.5rem;
+        }
+
+        .view-all-blogs {
+            background: #1a1a1a;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .view-all-blogs:hover {
+            background: #1a1a1a;
+            transform: translateY(-2px);
+        }
+
+        .blogs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-preview-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .blog-preview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-preview-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .blog-preview-content {
+            padding: 1.5rem;
+        }
+
+        .blog-preview-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-preview-meta {
+            display: flex;
+            gap: 1rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-preview-excerpt {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .read-blog {
+            display: inline-block;
+            background: #1a1a1a;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .read-blog:hover {
+            background: #1a1a1a;
+        }
+
+        .footer {
+            background: #1d1e1f;
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #1a1a1a;
+        }
+
+        .copyright {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-links {
+                padding: 0;
+            }
+        }
+
+        .wishlist-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .wishlist-item-details {
+            flex: 1;
+        }
+        .remove-wishlist-btn {
+            background: #eee;
+            color: #e74c3c;
+            border: none;
+            border-radius: 6px;
+            padding: 0.2rem 0.7rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .remove-wishlist-btn:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .cart-count-badge {
+            font-weight: bold;
+            color: white;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            margin-left: 6px;
+        }
+        .wishlist-count-badge {
+            font-weight: bold;
+            color: #e74c3c;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            margin-left: 6px;
+        }
+
+        .loyalty-points {
+            background: #f39c12;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: 1rem;
+        }
+
+        .loyalty-points:hover {
+            background: #d35400;
+        }
+
+        .loyalty-points-badge {
+            font-weight: bold;
+            color: white;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            margin-left: 6px;
+        }
+
+        .loyalty-points-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loyalty-points-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .loyalty-points-info {
+            margin: 2rem 0;
+        }
+
+        .points-balance {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .points-amount {
+            font-size: 2.5rem;
+            color: #f39c12;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .points-history {
+            margin-bottom: 2rem;
+        }
+
+        .points-history-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .redeem-options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .redeem-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .redeem-option button {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .redeem-option button:hover {
+            background: #d35400;
+        }
+
+        .close-modal-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .close-modal-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="index.html" class="navbar-brand">
+                <img src="bird.png" alt="HALCYON">
+                <span class="navbar-brand-text">HALCYON</span>
+            </a>
+            <div class="navbar-nav">
+                <a href="#" class="nav-link">Shop</a>
+                <a href="#" class="nav-link">Collections</a>
+                <a href="blogs.html" class="nav-link">Blog</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+            </div>
+            <div class="navbar-actions">
+                <div class="search-bar">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" class="search-input" placeholder=" Search products" id="productSearch" oninput="handleSearch(event)">
+                </div>
+                <button class="icon-btn" onclick="toggleNotifications()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="cart-badge" style="position:absolute;top:2px;right:2px;min-width:6px;height:16px;font-size:0.6rem;" id="notificationCount">3</span>
+                </button>
+                <button class="icon-btn" onclick="showLoyaltyPoints()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" onclick="showWishlist()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="wishlist-count-badge" id="wishlistCount" style="position:absolute;top:2px;right:2px;font-size:0.65rem;"></span>
+                </button>
+                <button class="cart-btn" onclick="viewCart()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span>Cart</span>
+                    <span class="cart-badge" id="cartCount">0</span>
+                </button>
+                <div class="user-menu">
+                    <button class="user-avatar" onclick="showLoginModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span id="userName">Login</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="category-nav" id="categoryNav">
+                <!-- Categories will be added here dynamically -->
+            </div>
+
+            <div id="categoriesContainer">
+                <!-- Categories and their products will be added here dynamically -->
+            </div>
+
+            <div id="searchResults" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Search Results</h2>
+                </div>
+                <div class="products-grid" id="productList"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="container">
+        <section class="products-section">
+            <div class="section-header">
+                <h2 class="section-title">Latest from Our Blog</h2>
+                <a href="blogs.html" class="view-all-link">View All →</a>
+            </div>
+            <div class="products-grid stagger-children" id="featuredBlogs">
+                <!-- Featured blogs will be added here dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>Shop</h4>
+                <ul class="footer-links">
+                    <li><a href="#">New Arrivals</a></li>
+                    <li><a href="#">Best Sellers</a></li>
+                    <li><a href="#">Sale</a></li>
+                    <li><a href="#">Collections</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Customer Service</h4>
+                <ul class="footer-links">
+                    <li><a href="customersupport.html">Contact Us</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="return.html">Returns</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Pinterest</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2025 HALCYON. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <a href="customersupport.html" class="floating-support-btn" title="Customer Support">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+    </a>
+
+    <div id="toast" class="toast"></div>
+
+    <div class="cart-modal" id="cartModal" onclick="closeCartModal(event)">
+        <div class="cart-content">
+            <h2>Your Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                Total: $<span id="cartTotal">0</span>
+            </div>
+            <button id="checkoutBtn" style="display:none;margin-top:1.5rem;background:#1a1a1a;color:white;padding:0.8rem 2rem;border:none;border-radius:25px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:background 0.2s;">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <div class="login-modal" id="loginModal">
+        <div class="login-content">
+            <h2>Login</h2>
+            <div id="loginError" style="color: var(--color-error); margin-bottom: 10px; display: none; font-size: 0.875rem;"></div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="login-submit">Login</button>
+                    <button type="button" class="cancel-btn" onclick="closeLoginModal()">Cancel</button>
+                </div>
+            </form>
+            <p class="register-link">
+                Don't have an account? <a href="#" onclick="showRegisterForm()">Register here</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="register-modal" id="registerModal" style="display:none;">
+        <div class="login-content">
+            <h2>Register</h2>
+            <div id="registerError" style="color: var(--color-error); margin-bottom: 10px; display: none; font-size: 0.875rem;"></div>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="registerName">Name</label>
+                    <input type="text" id="registerName" required placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <label for="registerContact">Contact Number</label>
+                    <input type="text" id="registerContact" required placeholder="Enter your contact number">
+                </div>
+                <div class="form-group">
+                    <label for="registerAddress">Address</label>
+                    <input type="text" id="registerAddress" required placeholder="Enter your address">
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="login-submit">Register</button>
+                    <button type="button" class="cancel-btn" onclick="closeRegisterModal()">Cancel</button>
+                </div>
+            </form>
+            <p class="register-link">
+                Already have an account? <a href="#" onclick="showLoginModalFromRegister()">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Notifications dropdown -->
+    <div class="notifications-dropdown" id="notificationsDropdown">
+        <div class="notification-item">Your order #1234 has shipped!</div>
+        <div class="notification-item">New discount on Footwear!</div>
+        <div class="notification-item">Welcome to our store!</div>
+    </div>
+
+    <div class="wishlist-modal" id="wishlistModal">
+        <div class="wishlist-content">
+            <h2>Your Wishlist</h2>
+            <div id="wishlistItems"></div>
+            <button onclick="closeWishlist()" class="close-wishlist-btn">Close</button>
+        </div>
+    </div>
+
+    <div class="loyalty-points-modal" id="loyaltyPointsModal">
+        <div class="loyalty-points-content">
+            <h2>Your Loyalty Points</h2>
+            <div class="loyalty-points-info">
+                <div class="points-balance">
+                    <h3>Current Balance</h3>
+                    <div class="points-amount" id="pointsBalance">0</div>
+                </div>
+                <div class="points-history">
+                    <h3>Points History</h3>
+                    <div id="pointsHistory"></div>
+                </div>
+                <div class="points-redeem">
+                    <h3>Redeem Points</h3>
+                    <div class="redeem-options">
+                        <div class="redeem-option">
+                            <span>100 points = $1 discount</span>
+                            <button onclick="redeemPoints(100)">Redeem</button>
+                        </div>
+                        <div class="redeem-option">
+                            <span>500 points = $5 discount</span>
+                            <button onclick="redeemPoints(500)">Redeem</button>
+                        </div>
+                        <div class="redeem-option">
+                            <span>1000 points = $12 discount</span>
+                            <button onclick="redeemPoints(1000)">Redeem</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="closeLoyaltyPointsModal()" class="close-modal-btn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let discoveredProducts = [];
+        let categories = new Map();
+        let activeCategory = 'all';
+        let currentUser = null;
+
+        // Place this at the top of your main JS or inside a <script> tag before rendering products
+        const productImages = {
+          1: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?q=80&w=800",
+          2: "https://images.unsplash.com/photo-1715539133733-e2a654bfc0c6?q=80&w=800",
+          3: "https://images.unsplash.com/photo-1672865451494-81c38f3aec13?w=800&q=80",
+          4: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=800",
+          5: "https://images.unsplash.com/photo-1700223255805-df7b526603bf?w=800&q=80"
+        };
+
+        async function discoverCategories() {
+            const attempts = Array.from({ length: 3 }, (_, i) => i + 1); // Changed to 3 since we know we have 3 categories
+            
+            try {
+                const categoryResults = await Promise.all(
+                    attempts.map(id => 
+                        fetch(`https://ecom-backend-alpha-rust.vercel.app/category?id=${id}`)
+                            .then(response => response.ok ? response.json() : null)
+                            .catch(() => null)
+                    )
+                );
+
+                const validCategories = categoryResults.filter(cat => cat !== null);
+                console.log('Valid Categories:', validCategories);
+                return validCategories;
+            } catch (error) {
+                console.error('Error discovering categories:', error);
+                return [];
+            }
+        }
+
+        async function discoverSubcategories() {
+            const attempts = Array.from({ length: 20 }, (_, i) => i + 1);
+            
+            try {
+                const subcategoryResults = await Promise.all(
+                    attempts.map(id => 
+                        fetch(`https://ecom-backend-alpha-rust.vercel.app/subcategory?id=${id}`)
+                            .then(response => response.ok ? response.json() : null)
+                            .catch(() => null)
+                    )
+                );
+
+                const validSubcategories = subcategoryResults.filter(subcat => subcat !== null);
+                console.log('Subcategories found:', validSubcategories);
+                return validSubcategories;
+            } catch (error) {
+                console.error('Error discovering subcategories:', error);
+                return [];
+            }
+        }
+
+        async function discoverProducts() {
+            const attempts = Array.from({ length: 20 }, (_, i) => i + 1);
+            
+            try {
+                const products = await Promise.all(
+                    attempts.map(id => 
+                        fetch(`https://ecom-backend-alpha-rust.vercel.app/product?id=${id}`)
+                            .then(response => response.ok ? response.json() : null)
+                            .catch(() => null)
+                    )
+                );
+
+                const validProducts = products.filter(product => product !== null);
+                console.log('Products found:', validProducts);
+                return validProducts;
+            } catch (error) {
+                console.error('Error discovering products:', error);
+                return [];
+            }
+        }
+
+        function displayCategoryNav(categories) {
+            const nav = document.getElementById('categoryNav');
+            nav.innerHTML = `
+                <button 
+                    class="${activeCategory === 'all' ? 'active' : ''}"
+                    onclick="filterByCategory('all')"
+                >
+                    All Products
+                </button>
+                ${categories
+                    .filter(cat => cat && cat.CategoryID)
+                    .map(cat => `
+                        <button 
+                            class="${activeCategory == cat.CategoryID ? 'active' : ''}"
+                            onclick="filterByCategory(${cat.CategoryID})"
+                        >
+                            ${cat.Name}
+                        </button>
+                    `).join('')}
+            `;
+        }
+
+        function displayProducts(products, categories, subcategories) {
+            const container = document.getElementById('categoriesContainer');
+            
+            if (activeCategory === 'all') {
+                let html = '';
+                categories.forEach(category => {
+                    const categorySubcats = subcategories.filter(sub => sub.CategoryID === category.CategoryID);
+                    
+                    const categoryProducts = products.filter(product => {
+                        return categorySubcats.some(sub => product.SubCategoryID === sub.SubCategoryID);
+                    });
+
+                    if (categoryProducts.length > 0) {
+                        html += `
+                            <section class="products-section">
+                                <div class="section-header">
+                                    <h2 class="section-title">${category.Name}</h2>
+                                    <a href="#" class="view-all-link">View All →</a>
+                                </div>
+                                <div class="products-grid stagger-children">
+                                    ${categoryProducts.map(product => `
+                                        <div class="product-card">
+                                            <div class="product-image-wrapper">
+                                                ${product.Discount ? '<span class="product-badge sale">Sale</span>' : '<span class="product-badge new">New</span>'}
+                                                <a href="product.html?id=${product.ProductID}">
+                                                    <img src="${productImages[product.ProductID] || product.image || `https://picsum.photos/seed/${product.ProductID}/400/500`}" 
+                                                         alt="${product.Name}" 
+                                                         class="product-image">
+                                                </a>
+                                                <button class="wishlist-btn" 
+                                                    onclick="addToWishlist(${product.ProductID}, '${product.Name}', ${product.Price}); event.preventDefault();">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;">
+                                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                                    </svg>
+                                                </button>
+                                                <button class="quick-add-btn" onclick="addToCart(${product.ProductID}, '${product.Name}', ${product.Price})">
+                                                    Quick Add
+                                                </button>
+                                            </div>
+                                            <div class="product-info">
+                                                <span class="product-category">${category.Name}</span>
+                                                <a href="product.html?id=${product.ProductID}" class="product-title">${product.Name}</a>
+                                                <div class="product-price">
+                                                    <span class="product-current-price">$${product.Price.toFixed(2)}</span>
+                                                    ${product.Discount ? `<span class="product-original-price">$${(product.Price * 1.2).toFixed(2)}</span>` : ''}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </section>
+                        `;
+                    }
+                });
+                container.innerHTML = html;
+            } else {
+                const category = categories.find(c => c.CategoryID === Number(activeCategory));
+                const categorySubcats = subcategories.filter(sub => sub.CategoryID === Number(activeCategory));
+                const categoryProducts = products.filter(product => {
+                    return categorySubcats.some(sub => product.SubCategoryID === sub.SubCategoryID);
+                });
+                container.innerHTML = `
+                    <section class="products-section">
+                        <div class="section-header">
+                            <h2 class="section-title">${category.Name}</h2>
+                        </div>
+                        <div class="products-grid stagger-children">
+                            ${categoryProducts.map(product => `
+                                <div class="product-card">
+                                    <div class="product-image-wrapper">
+                                        ${product.Discount ? '<span class="product-badge sale">Sale</span>' : '<span class="product-badge new">New</span>'}
+                                        <a href="product.html?id=${product.ProductID}">
+                                            <img src="${productImages[product.ProductID] || product.image || `https://picsum.photos/seed/${product.ProductID}/400/500`}" 
+                                                 alt="${product.Name}" 
+                                                 class="product-image">
+                                        </a>
+                                        <button class="wishlist-btn" 
+                                            onclick="addToWishlist(${product.ProductID}, '${product.Name}', ${product.Price}); event.preventDefault();">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;">
+                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="quick-add-btn" onclick="addToCart(${product.ProductID}, '${product.Name}', ${product.Price})">
+                                            Quick Add
+                                        </button>
+                                    </div>
+                                    <div class="product-info">
+                                        <span class="product-category">${category.Name}</span>
+                                        <a href="product.html?id=${product.ProductID}" class="product-title">${product.Name}</a>
+                                        <div class="product-price">
+                                            <span class="product-current-price">$${product.Price.toFixed(2)}</span>
+                                            ${product.Discount ? `<span class="product-original-price">$${(product.Price * 1.2).toFixed(2)}</span>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>
+                `;
+            }
+        }
+
+        function filterByCategory(categoryId) {
+            console.log("Filtering by category:", categoryId);
+            activeCategory = categoryId;
+            displayCategoryNav(discoveredCategories);
+            displayProducts(discoveredProducts, discoveredCategories, discoveredSubcategories);
+            debugData();
+        }
+
+        function showSuccessMessage(message) {
+            showToast(message, 'success');
+        }
+
+        async function addToCart(id, name, price) {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to add to cart.');
+                return;
+            }
+
+            try {
+                console.log('Adding to cart:', { id, name, price, user }); // Debug log
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/cart/add', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({
+                        productId: id,
+                    quantity: 1
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData); // Debug log
+                    throw new Error(errorData.error || 'Failed to add to cart');
+            }
+            
+                const data = await response.json();
+                showSuccessMessage('Added to cart!');
+                // Update cart items and count
+                cart = await fetchCartItems();
+            showAddedToCartAnimation();
+            updateCartCount();
+            } catch (err) {
+                console.error('Error adding to cart:', err); // Debug log
+                showErrorMessage(err.message || 'Server error');
+            }
+        }
+
+        async function fetchCartItems() {
+            const user = getCurrentUser();
+            if (!user || !user.token) return [];
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/cart', {
+                    headers: {
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                });
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (err) {
+                console.error('Error fetching cart:', err);
+            }
+            return [];
+        }
+
+        async function removeFromCart(productId) {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to manage your cart.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/cart/remove', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ productId })
+                });
+                if (response.ok) {
+                    cart = await fetchCartItems();
+                    renderCartItems();
+                } else {
+                    const data = await response.json();
+                    showErrorMessage(data.error || 'Could not remove item from cart');
+                }
+            } catch (err) {
+                showErrorMessage('Server error');
+            }
+            updateCartCount();
+        }
+
+        function showAddedToCartAnimation() {
+            const cartIcon = document.querySelector('.cart');
+            cartIcon.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                cartIcon.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        async function viewCart() {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to view your cart.');
+                return;
+            }
+
+            try {
+                // Fetch cart items from server
+                cart = await fetchCartItems();
+            renderCartItems();
+            document.getElementById('cartModal').style.display = 'flex';
+            updateCartCount();
+            } catch (err) {
+                showErrorMessage('Error loading cart');
+            }
+        }
+
+        function closeCartModal(event) {
+            if (event.target.className === 'cart-modal') {
+                document.getElementById('cartModal').style.display = 'none';
+            }
+        }
+
+        function handleSearch(event) {
+            const searchTerm = event.target.value.toLowerCase().trim();
+            const searchResults = document.getElementById('searchResults');
+            const categoriesContainer = document.getElementById('categoriesContainer');
+            
+            if (searchTerm.length < 2) {
+                searchResults.style.display = 'none';
+                categoriesContainer.style.display = 'block';
+                return;
+            }
+
+            const filteredProducts = discoveredProducts.filter(product => {
+                const productName = (product.Name || '').toLowerCase();
+                const productDescription = (product.Description || '').toLowerCase();
+                return productName.includes(searchTerm) || productDescription.includes(searchTerm);
+            });
+
+            displaySearchResults(filteredProducts);
+        }
+
+        function displaySearchResults(products) {
+            const searchResults = document.getElementById('searchResults');
+            const categoriesContainer = document.getElementById('categoriesContainer');
+            const productList = document.getElementById('productList');
+
+            if (products.length === 0) {
+                productList.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 4rem 2rem;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 64px; height: 64px; color: #999; margin-bottom: 1rem;">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <p style="color: #666; font-size: 1rem;">No products found matching your search.</p>
+                    </div>
+                `;
+            } else {
+                productList.innerHTML = products.map(product => `
+                    <div class="product-card">
+                        <div class="product-image-wrapper">
+                            <span class="product-badge new">New</span>
+                            <a href="product.html?id=${product.ProductID}">
+                                <img src="${productImages[product.ProductID] || product.image || `https://picsum.photos/seed/${product.ProductID}/400/500`}" 
+                                     alt="${product.Name}" 
+                                     class="product-image">
+                            </a>
+                            <button class="wishlist-btn" 
+                                onclick="addToWishlist(${product.ProductID}, '${product.Name}', ${product.Price}); event.preventDefault();">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
+                            <button class="quick-add-btn" onclick="addToCart(${product.ProductID}, '${product.Name}', ${product.Price})">
+                                Quick Add
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">Search Result</span>
+                            <a href="product.html?id=${product.ProductID}" class="product-title">${product.Name}</a>
+                            <div class="product-price">
+                                <span class="product-current-price">$${product.Price.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            searchResults.style.display = 'block';
+            categoriesContainer.style.display = 'none';
+        }
+
+        async function initializeStore() {
+            // Show loading skeleton
+            showLoadingSkeleton();
+            
+            const [categories, subcategories, products] = await Promise.all([
+                discoverCategories(),
+                discoverSubcategories(),
+                discoverProducts()
+            ]);
+
+            console.log('Store initialized with:', { categories, subcategories, products });
+
+            discoveredCategories = categories;
+            discoveredSubcategories = subcategories;
+            discoveredProducts = products;
+
+            displayCategoryNav(categories);
+            displayProducts(products, categories, subcategories);
+        }
+        
+        function showLoadingSkeleton() {
+            const container = document.getElementById('categoriesContainer');
+            const skeletonHTML = `
+                <section class="products-section">
+                    <div class="section-header">
+                        <div class="skeleton skeleton-text medium" style="width:200px;height:32px;"></div>
+                    </div>
+                    <div class="products-grid">
+                        ${Array(4).fill().map(() => `
+                            <div class="product-card">
+                                <div class="product-image-wrapper">
+                                    <div class="skeleton skeleton-image"></div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="skeleton skeleton-text" style="width:40%;height:12px;"></div>
+                                    <div class="skeleton skeleton-text medium" style="margin-top:8px;"></div>
+                                    <div class="skeleton skeleton-text short" style="margin-top:8px;"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+            container.innerHTML = skeletonHTML;
+        }
+
+        // Initialize the store when the page loads
+        window.onload = () => {
+            updateWishlistCount();
+            updateCartCount();
+            initializeStore();
+            displayFeaturedBlogs();
+            updateLoyaltyPoints();
+            setInterval(updateLoyaltyPoints, 10000);
+            
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 20) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        };
+        
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add this debug function to check data
+        function debugData() {
+            console.log("Current active category:", activeCategory);
+            console.log("Products:", discoveredProducts);
+            console.log("Categories:", discoveredCategories);
+            console.log("Subcategories:", discoveredSubcategories);
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.style.display = 'none';
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            console.log('Attempting login with:', { email, password }); // Debug log
+            
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                console.log('Response status:', response.status); // Debug log
+
+                const data = await response.json();
+                console.log('Response data:', data); // Debug log
+
+                if (response.ok) {
+                    // Store user data and token
+                    const userData = {
+                        token: data.token,
+                        CustomerID: data.CustomerID,
+                        Name: data.Name,
+                        Email: data.Email
+                    };
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    currentUser = userData;
+                    
+                    // Update UI
+                    updateLoginStatus();
+                    closeLoginModal();
+                    showSuccessMessage('Login successful!');
+                    updateLoyaltyPoints(); // Update points after login
+                } else {
+                    errorDiv.textContent = data.error || 'Invalid email or password';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = 'Error connecting to server';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        function updateLoginStatus() {
+            const userNameEl = document.getElementById('userName');
+            const userAvatar = document.querySelector('.user-avatar');
+            if (currentUser) {
+                userNameEl.textContent = currentUser.Name || currentUser.FirstName || currentUser.Email;
+                userAvatar.onclick = function() {
+                    window.location.href = 'dashboard.html';
+                };
+            } else {
+                userNameEl.textContent = 'Login';
+                userAvatar.onclick = showLoginModal;
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                updateLoginStatus();
+            }
+        });
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateLoginStatus();
+            showSuccessMessage('Logged out successfully!');
+        }
+
+        function showRegisterForm() {
+            // Clear registration form fields every time modal is opened
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerContact').value = '';
+            document.getElementById('registerAddress').value = '';
+            document.getElementById('registerError').style.display = 'none';
+            document.getElementById('registerModal').style.display = 'flex';
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+        }
+
+        function showLoginModalFromRegister() {
+            closeRegisterModal();
+            showLoginModal();
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            const errorDiv = document.getElementById('registerError');
+            errorDiv.style.display = 'none';
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const contact = document.getElementById('registerContact').value;
+            const address = document.getElementById('registerAddress').value;
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, contact, address })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    errorDiv.style.color = 'green';
+                    errorDiv.textContent = 'Registration successful!';
+                    errorDiv.style.display = 'block';
+                    // Clear the registration form fields
+                    document.getElementById('registerName').value = '';
+                    document.getElementById('registerEmail').value = '';
+                    document.getElementById('registerPassword').value = '';
+                    document.getElementById('registerContact').value = '';
+                    document.getElementById('registerAddress').value = '';
+                    setTimeout(() => {
+                        errorDiv.style.display = 'none';
+                        errorDiv.style.color = 'red';
+                        closeRegisterModal();
+                        showLoginModal();
+                        updateLoyaltyPoints(); // Update points after registration
+                    }, 1500);
+                } else {
+                    errorDiv.style.color = 'red';
+                    errorDiv.textContent = data.error || 'Registration failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.style.color = 'red';
+                errorDiv.textContent = 'Error connecting to server';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const loginModal = document.getElementById('loginModal');
+            if (event.target === loginModal) {
+                closeLoginModal();
+            }
+        }
+
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notificationsDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Optional: Hide dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const bell = document.querySelector('.notification-bell');
+            const dropdown = document.getElementById('notificationsDropdown');
+            if (!bell.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        async function addToWishlist(productId, productName, productPrice) {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to add to wishlist.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/wishlist/add', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ productId })
+                });
+                
+                if (response.ok) {
+                showSuccessMessage('Added to wishlist!');
+                updateWishlistCount();
+                } else {
+                    const data = await response.json();
+                    showErrorMessage(data.error || 'Could not add to wishlist');
+                }
+            } catch (err) {
+                showErrorMessage('Server error');
+            }
+        }
+
+        async function showWishlist() {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to view your wishlist.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/wishlist', {
+                    headers: {
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const wishlistItems = await response.json();
+            const itemsDiv = document.getElementById('wishlistItems');
+                    
+                    if (wishlistItems.length === 0) {
+                itemsDiv.innerHTML = '<p>Your wishlist is empty.</p>';
+            } else {
+                        itemsDiv.innerHTML = wishlistItems.map(item => `
+                            <div class="wishlist-item">
+                                <a href="product.html?id=${item.ProductID}">
+                                <img src="https://picsum.photos/seed/${item.ProductID}/80/80" 
+                                     alt="${item.Name}" 
+                                     style="width:48px;height:48px;object-fit:cover;border-radius:8px;">
+                                </a>
+                                <div class="wishlist-item-details">
+                                    <strong>${item.Name}</strong>
+                                    <div>$${item.Price.toFixed(2)}</div>
+                                </div>
+                                <button onclick="removeFromWishlist(${item.ProductID})" class="remove-wishlist-btn">Remove</button>
+                    </div>
+                `).join('');
+            }
+                    
+                    document.getElementById('wishlistModal').style.display = 'flex';
+                    updateWishlistCount();
+                } else {
+                    const data = await response.json();
+                    showErrorMessage(data.error || 'Could not load wishlist');
+                }
+            } catch (err) {
+                showErrorMessage('Server error');
+            }
+        }
+
+        async function removeFromWishlist(productId) {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to manage your wishlist.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/wishlist/remove', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ productId })
+                });
+                
+                if (response.ok) {
+                    showSuccessMessage('Removed from wishlist!');
+                    showWishlist(); // Refresh the wishlist display
+                } else {
+                    const data = await response.json();
+                    showErrorMessage(data.error || 'Could not remove from wishlist');
+                }
+            } catch (err) {
+                showErrorMessage('Server error');
+            }
+        }
+
+        function renderCartItems() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const cartTotalSpan = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if (!cart || cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
+                cartTotalSpan.textContent = '0.00';
+                if (checkoutBtn) checkoutBtn.style.display = 'none';
+                return;
+            }
+            let total = 0;
+            cartItemsDiv.innerHTML = cart.map((item, idx) => {
+                const itemTotal = item.Price * item.Quantity;
+                total += itemTotal;
+                return `
+                    <div class="cart-item">
+                        <input type="checkbox" class="cart-checkbox" id="cart-check-${idx}" data-index="${idx}">
+                        <span class="cart-item-name">${item.Name}</span>
+                        <span class="cart-item-qty">
+                            <button class="qty-btn" onclick="decrementCartItem(${item.ProductID})">-</button>
+                            ${item.Quantity}
+                            <button class="qty-btn" onclick="incrementCartItem(${item.ProductID})">+</button>
+                        </span>
+                        <span class="cart-item-price">$${itemTotal.toFixed(2)}</span>
+                        <button onclick="removeFromCart(${item.ProductID})" class="remove-cart-btn">Remove</button>
+                    </div>
+                `;
+            }).join('');
+            cartTotalSpan.textContent = total.toFixed(2);
+            if (checkoutBtn) checkoutBtn.style.display = 'block';
+        }
+
+        function getSelectedCartItems() {
+            const checkboxes = document.querySelectorAll('.cart-checkbox:checked');
+            const selectedIndexes = Array.from(checkboxes).map(cb => Number(cb.dataset.index));
+            return selectedIndexes.map(idx => cart[idx]);
+        }
+
+        function showErrorMessage(message) {
+            showToast(message, 'error');
+        }
+
+        function displayFeaturedBlogs() {
+            const featuredBlogs = blogs.slice(0, 3);
+            const blogsGrid = document.getElementById('featuredBlogs');
+            
+            blogsGrid.innerHTML = featuredBlogs.map(blog => `
+                <div class="product-card" style="cursor:pointer;">
+                    <div class="product-image-wrapper">
+                        <img src="${blog.image}" alt="${blog.title}" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Blog</span>
+                        <a href="blog-detail.html?id=${blog.id}" class="product-title">${blog.title}</a>
+                        <p style="font-size:0.8rem;color:#666;margin-top:0.5rem;">${blog.date} · By ${blog.author}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCurrentUser() {
+            if (!currentUser) {
+                const storedUser = localStorage.getItem('currentUser');
+                if (storedUser) {
+                    currentUser = JSON.parse(storedUser);
+                }
+            }
+            return currentUser;
+        }
+
+        // Add the decrementCartItem function to call /cart/decrement
+        async function decrementCartItem(productId) {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to manage your cart.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/cart/decrement', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ productId })
+                });
+                if (response.ok) {
+                    cart = await fetchCartItems();
+                    renderCartItems();
+                } else {
+                    const data = await response.json();
+                    showErrorMessage(data.error || 'Could not update cart');
+                }
+            } catch (err) {
+                showErrorMessage('Server error');
+            }
+            updateCartCount();
+        }
+
+        // Add the incrementCartItem function to call /cart/increment
+        async function incrementCartItem(productId) {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to manage your cart.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/cart/increment', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ productId })
+                });
+                if (response.ok) {
+                    cart = await fetchCartItems();
+                    renderCartItems();
+                } else {
+                    const data = await response.json();
+                    showErrorMessage(data.error || 'Could not update cart');
+                }
+            } catch (err) {
+                showErrorMessage('Server error');
+            }
+            updateCartCount();
+        }
+
+        function closeWishlist() {
+            document.getElementById('wishlistModal').style.display = 'none';
+        }
+
+        function updateWishlistCount() {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                document.getElementById('wishlistCount').textContent = '0';
+                return;
+            }
+
+            fetch('https://ecom-backend-alpha-rust.vercel.app/wishlist/count', {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('wishlistCount').textContent = data.count;
+            })
+            .catch(error => {
+                console.error('Error fetching wishlist count:', error);
+                document.getElementById('wishlistCount').textContent = '0';
+            });
+        }
+
+        function updateCartCount() {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                document.getElementById('cartCount').textContent = '0';
+                return;
+            }
+
+            fetch('https://ecom-backend-alpha-rust.vercel.app/cart/count', {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('cartCount').textContent = data.count;
+            })
+            .catch(error => {
+                console.error('Error fetching cart count:', error);
+                document.getElementById('cartCount').textContent = '0';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if (checkoutBtn) {
+                checkoutBtn.onclick = function() {
+                    proceedToCheckout();
+                };
+            }
+        });
+
+        async function showLoyaltyPoints() {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to view your loyalty points.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/loyalty/points', {
+                    headers: {
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('pointsBalance').textContent = data.points;
+                    document.getElementById('loyaltyPointsCount').textContent = data.points;
+                    // Also update the badge in case it's out of sync
+                    updateLoyaltyPoints();
+                    // Display points history
+                    const historyDiv = document.getElementById('pointsHistory');
+                    if (data.history && data.history.length > 0) {
+                        historyDiv.innerHTML = data.history.map(item => `
+                            <div class="points-history-item">
+                                <span>${item.description}</span>
+                                <span>${item.points > 0 ? '+' : ''}${item.points} points</span>
+                            </div>
+                        `).join('');
+                    } else {
+                        historyDiv.innerHTML = '<p>No points history available.</p>';
+                    }
+                    document.getElementById('loyaltyPointsModal').style.display = 'flex';
+                } else {
+                    const errorData = await response.json();
+                    showErrorMessage(errorData.error || 'Could not load loyalty points');
+                }
+            } catch (err) {
+                showErrorMessage('Server error');
+            }
+        }
+
+        function closeLoyaltyPointsModal() {
+            document.getElementById('loyaltyPointsModal').style.display = 'none';
+        }
+
+        async function redeemPoints(points) {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                showLoginModal();
+                showErrorMessage('Please log in to redeem points.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/loyalty/redeem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ points })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showSuccessMessage(`Successfully redeemed ${points} points for $${data.discount} discount!`);
+                    // Update points display immediately
+                    const pointsResponse = await fetch('https://ecom-backend-alpha-rust.vercel.app/loyalty/points', {
+                        headers: {
+                            'Authorization': `Bearer ${user.token}`
+                        }
+                    });
+                    if (pointsResponse.ok) {
+                        const pointsData = await pointsResponse.json();
+                        document.getElementById('pointsBalance').textContent = pointsData.points;
+                        document.getElementById('loyaltyPointsCount').textContent = pointsData.points;
+                    }
+                } else {
+                    const errorData = await response.json();
+                    showErrorMessage(errorData.error || 'Could not redeem points');
+                }
+            } catch (err) {
+                showErrorMessage('Server error');
+            }
+        }
+
+        // async function proceedToCheckout() {
+        //     const user = getCurrentUser();
+        //     if (!user || !user.token) {
+        //         showLoginModal();
+        //         showErrorMessage('Please log in to checkout.');
+        //         return;
+        //     }
+
+        //     try {
+        //         const selectedItems = getSelectedCartItems();
+        //         if (selectedItems.length === 0) {
+        //             showErrorMessage('Please select items to checkout');
+        //             return;
+        //         }
+
+        //         const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/order/checkout', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'Authorization': `Bearer ${user.token}`
+        //             },
+        //             body: JSON.stringify({
+        //                 items: selectedItems
+        //             })
+        //         });
+
+        //         if (response.ok) {
+        //             const data = await response.json();
+        //             // showSuccessMessage(`Order placed successfully! You earned ${data.loyaltyPoints} loyalty points!`);
+        //             cart = await fetchCartItems();
+        //             renderCartItems();
+        //             updateCartCount();
+        //             showLoyaltyPoints(); // Show updated points
+        //             window.location.href = 'checkout.html';
+        //         } else {
+        //             const errorData = await response.json();
+        //             console.log(errorData);
+        //             showErrorMessage(errorData.error || 'Could not place order');
+        //         }
+        //     } catch (err) {
+        //         console.log(err);
+        //         showErrorMessage('Server error');
+        //     }
+        //     const checkoutBtn = document.getElementById('checkoutBtn');
+        //     if (checkoutBtn) {
+        //         checkoutBtn.onclick = function() {
+        //             window.location.href = 'checkout.html';
+        //         };
+        //     }
+        // }
+        async function proceedToCheckout() {
+                const user = getCurrentUser();
+                if (!user || !user.token) {
+                    showLoginModal();
+                    showErrorMessage('Please log in to checkout.');
+                    return;
+                }
+
+                try {
+                    const selectedItems = getSelectedCartItems();
+                    if (selectedItems.length === 0) {
+                        showErrorMessage('Please select items to checkout');
+                        return;
+                    }
+
+                    // Store selected items in sessionStorage
+                    sessionStorage.setItem('checkoutItems', JSON.stringify(selectedItems));
+
+                    // Redirect to checkout page
+                    window.location.href = 'checkout.html';
+                } catch (err) {
+                    console.log(err);
+                    showErrorMessage('Something went wrong');
+                }
+        }
+
+        async function updateLoyaltyPoints() {
+            const user = getCurrentUser();
+            if (!user || !user.token) {
+                document.getElementById('loyaltyPointsCount').textContent = '0';
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ecom-backend-alpha-rust.vercel.app/loyalty/points', {
+                    headers: {
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('loyaltyPointsCount').textContent = data.points;
+                }
+            } catch (error) {
+                console.error('Error fetching loyalty points:', error);
+                document.getElementById('loyaltyPointsCount').textContent = '0';
+            }
+        }
+    </script>
+    
+    
+</body>
+</html>

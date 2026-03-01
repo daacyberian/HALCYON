@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Return Product - HALCYON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-content { padding-top: calc(var(--navbar-height) + 2rem); min-height: 100vh; background: var(--color-bg); }
+        .page-container { max-width: 500px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+        .page-card { background: var(--color-surface); border-radius: var(--radius-xl); padding: 2.5rem; box-shadow: var(--shadow-sm); }
+        .page-title { font-size: 1.75rem; font-weight: 600; color: var(--color-text); margin-bottom: 2rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-text); }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 0.9375rem; }
+        .form-textarea { min-height: 100px; resize: vertical; }
+        #returnMsg { margin-top: 1rem; font-weight: 500; }
+        #returnMsg.success { color: var(--color-success); }
+        #returnMsg.error { color: var(--color-error); }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="index.html" class="navbar-brand">
+                <img src="bird.png" alt="HALCYON">
+                <span class="navbar-brand-text">HALCYON</span>
+            </a>
+            <div class="navbar-actions">
+                <a href="index.html" class="btn btn-secondary">Back to Store</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="page-container">
+            <div class="page-card">
+                <h1 class="page-title">Request a Product Return</h1>
+                <form id="returnForm">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" required>
+                    <button type="button" id="loadOrdersBtn" class="btn btn-secondary" style="margin-bottom:1rem;width:100%;">Load My Orders</button>
+                    <div id="orderSelectDiv" style="display:none;">
+                        <label class="form-label">Order Item</label>
+                        <select id="orderItemSelect" class="form-select" required></select>
+                        <label class="form-label">Reason for Return</label>
+                        <textarea id="reason" class="form-textarea" required></textarea>
+                        <button type="submit" class="btn btn-primary" style="width:100%;">Request Return</button>
+                    </div>
+                </form>
+                <div id="returnMsg"></div>
+            </div>
+        </div>
+    </main>
+    <script>
+    document.getElementById('loadOrdersBtn').onclick = async function() {
+        const email = document.getElementById('email').value;
+        if (!email) return alert('Enter your email first!');
+        let res, items;
+        try {
+            res = await fetch(`https://ecom-backend-alpha-rust.vercel.app/orderitems/by-customer?email=${encodeURIComponent(email)}`);
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({ error: 'Server error' }));
+                document.getElementById('returnMsg').textContent = err.error || 'Failed to load orders.';
+                document.getElementById('orderSelectDiv').style.display = 'none';
+                return;
+            }
+            items = await res.json();
+        } catch (e) {
+            document.getElementById('returnMsg').textContent = 'Network or server error.';
+            document.getElementById('orderSelectDiv').style.display = 'none';
+            return;
+        }
+        if (!Array.isArray(items) || items.length === 0) {
+            document.getElementById('returnMsg').textContent = 'No orders found for this email.';
+            document.getElementById('orderSelectDiv').style.display = 'none';
+            return;
+        }
+        const select = document.getElementById('orderItemSelect');
+        select.innerHTML = items.map(item =>
+            `<option value="${item.OrderItemID}|${item.PaymentID}">${item.ProductName} | OrderItemID: ${item.OrderItemID} | Subtotal: $${item.Subtotal.toFixed(2)}</option>`
+        ).join('');
+        document.getElementById('orderSelectDiv').style.display = 'block';
+        document.getElementById('returnMsg').textContent = '';
+    };
+
+    document.getElementById('returnForm').onsubmit = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const [orderItemId, paymentId] = document.getElementById('orderItemSelect').value.split('|');
+        const reason = document.getElementById('reason').value;
+        const res = await fetch('https://ecom-backend-alpha-rust.vercel.app/return/request', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderItemId, paymentId, email, reason })
+        });
+        const data = await res.json();
+        document.getElementById('returnMsg').textContent = data.message || data.error;
+        if (data.message) {
+            document.getElementById('returnForm').reset();
+            document.getElementById('orderSelectDiv').style.display = 'none';
+        }
+    };
+    </script>
+</body>
+</html> 

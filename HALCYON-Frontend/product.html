@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - HALCYON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .product-detail-page { padding-top: calc(var(--navbar-height) + 2rem); min-height: 100vh; background: var(--color-bg); }
+        .product-detail-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-secondary); font-size: 0.875rem; font-weight: 500; margin-bottom: 2rem; transition: color var(--transition-fast); }
+        .back-link:hover { color: var(--color-accent); }
+        .product-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; background: var(--color-surface); border-radius: var(--radius-xl); padding: 2rem; box-shadow: var(--shadow-sm); }
+        .product-detail-image { aspect-ratio: 4/5; border-radius: var(--radius-lg); overflow: hidden; background: var(--color-bg-alt); }
+        .product-detail-image img { width: 100%; height: 100%; object-fit: cover; }
+        .product-detail-info { display: flex; flex-direction: column; justify-content: center; }
+        .product-detail-title { font-size: 2rem; font-weight: 600; color: var(--color-text); margin-bottom: 1rem; line-height: 1.2; }
+        .product-detail-price { font-size: 1.75rem; font-weight: 700; color: var(--color-accent); margin-bottom: 1.5rem; }
+        .product-detail-desc { color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 1.5rem; }
+        .product-meta-item { display: flex; align-items: center; gap: 0.5rem; color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: 0.75rem; }
+        .product-detail-actions { display: flex; gap: 1rem; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--color-border-light); }
+        .reviews-section { margin-top: 3rem; }
+        .reviews-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; }
+        .review-card { background: var(--color-surface); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; border: 1px solid var(--color-border-light); }
+        .review-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+        .review-author { font-weight: 600; color: var(--color-text); }
+        .review-rating { color: var(--color-accent); }
+        .review-date { font-size: 0.8rem; color: var(--color-text-muted); }
+        .review-text { color: var(--color-text-secondary); line-height: 1.6; }
+        .review-form-container { margin-top: 2rem; background: var(--color-surface); border-radius: var(--radius-lg); padding: 1.5rem; }
+        .star-input { font-size: 1.5rem; color: var(--color-border); cursor: pointer; transition: color var(--transition-fast); }
+        .star-input.active, .star-input:hover { color: var(--color-accent); }
+        @media (max-width: 768px) {
+            .product-detail-grid { grid-template-columns: 1fr; gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="index.html" class="navbar-brand">
+                <img src="bird.png" alt="HALCYON">
+                <span class="navbar-brand-text">HALCYON</span>
+            </a>
+            <div class="navbar-actions">
+                <a href="index.html" class="btn btn-secondary">Back to Store</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="product-detail-page">
+        <div class="product-detail-container">
+            <a href="index.html" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Store
+            </a>
+            
+            <div class="product-detail-grid">
+                <div class="product-detail-image">
+                    <img id="productImage" src="" alt="Product Image">
+                </div>
+                <div class="product-detail-info">
+                    <h1 id="productName" class="product-detail-title"></h1>
+                    <div id="productPrice" class="product-detail-price"></div>
+                    <div id="productDescription" class="product-detail-desc"></div>
+                    <div id="productStock" class="product-meta-item"></div>
+                    <div id="productSubcategory" class="product-meta-item"></div>
+                    <div id="productDiscount" class="product-meta-item"></div>
+                    <div class="product-detail-actions">
+                        <button id="addToCartBtn" class="btn btn-primary" style="flex:1;">Add to Cart</button>
+                        <button id="addToWishlistBtn" class="btn btn-secondary" style="flex:1;">Add to Wishlist</button>
+                    </div>
+                </div>
+            </div>
+            
+            <section class="reviews-section">
+                <h2 class="reviews-title">Customer Reviews</h2>
+                <div id="reviewList"></div>
+                <div id="reviewFormContainer"></div>
+            </section>
+        </div>
+    </main>
+    <script>
+    // Place this at the top of your main JS or inside a <script> tag before rendering product details
+    const productImages = {
+      1: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?q=80&w=800",
+      2: "https://images.unsplash.com/photo-1715539133733-e2a654bfc0c6?q=80&w=800",
+      3: "https://images.unsplash.com/photo-1672865451494-81c38f3aec13?w=800&q=80",
+      4: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=800",
+      5: "https://images.unsplash.com/photo-1700223255805-df7b526603bf?w=800&q=80"
+    };
+    // Helper to get query param
+    function getQueryParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+    }
+    const productId = getQueryParam('id');
+    if (!productId) {
+        document.getElementById('productDetails').innerHTML = '<p>Product not found.</p>';
+        document.getElementById('reviewFormContainer').innerHTML = '';
+    } else {
+        fetchProduct();
+        fetchReviews();
+        renderReviewForm();
+    }
+    async function fetchProduct() {
+        const res = await fetch(`https://ecom-backend-alpha-rust.vercel.app/product?id=${productId}`);
+        if (!res.ok) {
+            document.getElementById('productName').textContent = 'Product not found.';
+            return;
+        }
+        const product = await res.json();
+        document.getElementById('productName').textContent = product.Name;
+        document.getElementById('productPrice').textContent = `$${product.Price.toFixed(2)}`;
+        document.getElementById('productDescription').textContent = product.Description;
+        document.getElementById('productStock').textContent = `Stock: ${product.Stock}`;
+        document.getElementById('productSubcategory').textContent = `Subcategory: ${product.SubCategoryID}`;
+        document.getElementById('productDiscount').textContent = product.Discount ? `Discount: ${product.Discount}%` : '';
+        const img = document.getElementById('productImage');
+        img.src = productImages[product.ProductID] || product.image || `https://picsum.photos/seed/${product.ProductID}/400/300`;
+        img.alt = product.Name;
+        if (product.ProductID == 5) {
+            img.style.objectFit = 'contain';
+            img.style.background = '#fff';
+            img.style.height = '300px';
+        } else {
+            img.style.objectFit = 'cover';
+            img.style.height = '200px';
+        }
+        // Add to Cart
+        document.getElementById('addToCartBtn').onclick = async function() {
+            const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            if (!user || !user.token) {
+                alert('Please log in to add to cart.');
+                return;
+            }
+            try {
+                const res = await fetch('https://ecom-backend-alpha-rust.vercel.app/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ productId: product.ProductID, quantity: 1 })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    this.textContent = 'Added to Cart!';
+                    setTimeout(() => { this.textContent = 'Add to Cart'; }, 1200);
+                } else {
+                    // alert(data.error || 'Could not add to cart');
+                }
+            } catch (err) {
+                alert('Server error');
+            }
+        };
+        // Add to Wishlist
+        document.getElementById('addToWishlistBtn').onclick = async function() {
+            const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            if (!user || !user.token) {
+                alert('Please log in to add to wishlist.');
+                return;
+            }
+            try {
+                const res = await fetch('https://ecom-backend-alpha-rust.vercel.app/wishlist/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ productId: product.ProductID })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    this.textContent = 'Added to Wishlist!';
+                    setTimeout(() => { this.textContent = 'Add to Wishlist'; }, 1200);
+                } else {
+                    alert(data.error || 'Could not add to wishlist');
+                }
+            } catch (err) {
+                alert('Server error');
+            }
+        };
+    }
+    async function fetchReviews() {
+        const res = await fetch(`https://ecom-backend-alpha-rust.vercel.app/reviews?productId=${productId}`);
+        const reviews = res.ok ? await res.json() : [];
+        const reviewList = document.getElementById('reviewList');
+        if (!reviews.length) {
+            reviewList.innerHTML = '<p>No reviews yet.</p>';
+            return;
+        }
+        reviewList.innerHTML = reviews.map(r => `
+            <div class="review-item">
+                <div class="review-author">${r.CustomerName || 'Anonymous'} <span class="review-rating">${'★'.repeat(r.Rating)}${'☆'.repeat(5 - r.Rating)}</span></div>
+                <div class="review-text">${r.Review}</div>
+                ${r.Date ? `<div style='color:#888;font-size:0.95em;margin-top:0.3em;'>${r.Date}</div>` : ''}
+            </div>
+        `).join('');
+    }
+    function renderReviewForm() {
+        const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const container = document.getElementById('reviewFormContainer');
+        if (!user) {
+            container.innerHTML = '<div class="login-msg">Please log in to leave a review.</div>';
+            return;
+        }
+        container.innerHTML = `
+            <form id="reviewForm" class="review-form">
+                <label>Rating:
+                    <span id="starInputs">
+                        ${[1,2,3,4,5].map(i => `<span class="star-input" data-value="${i}">★</span>`).join('')}
+                    </span>
+                </label>
+                <label>Review:
+                    <textarea id="reviewText" required></textarea>
+                </label>
+                <button type="submit">Submit Review</button>
+            </form>
+        `
+    }
+    </script>
+</body>
+</html>

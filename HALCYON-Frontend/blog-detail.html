@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Detail - HALCYON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-content { padding-top: calc(var(--navbar-height) + 2rem); min-height: 100vh; background: var(--color-bg); }
+        .page-container { max-width: 800px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+        .blog-detail-card { background: var(--color-surface); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-sm); }
+        .blog-hero-image { width: 100%; height: 400px; object-fit: cover; }
+        .blog-detail-content { padding: 2.5rem; }
+        .blog-detail-title { font-size: 2rem; font-weight: 600; color: var(--color-text); margin-bottom: 1rem; line-height: 1.3; }
+        .blog-detail-meta { display: flex; gap: 1.5rem; color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: 2rem; }
+        .blog-detail-body { color: var(--color-text-secondary); line-height: 1.8; font-size: 1rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-accent); font-weight: 500; margin-bottom: 1.5rem; }
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            background: #1a1a1a;
+        }
+
+        .cart:hover {
+            background: #1a1a1a;
+        }
+
+        .login-btn:hover {
+            background: #1a1a1a;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .blog-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .blog-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .blog-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-content h2 {
+            color: #2c3e50;
+            margin: 2rem 0 1rem;
+        }
+
+        .blog-content ul, .blog-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-to-blogs {
+            display: inline-block;
+            background: #1a1a1a;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .back-to-blogs:hover {
+            background: #1a1a1a;
+        }
+
+        .floating-support-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: #1a1a1a;
+            color: #fff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 16px rgba(52,152,219,0.2);
+            z-index: 2000;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .floating-support-btn:hover {
+            background: #1a1a1a;
+            box-shadow: 0 6px 24px rgba(52,152,219,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .blog-title {
+                font-size: 2rem;
+            }
+
+            .blog-image {
+                height: 300px;
+            }
+
+            .blog-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="index.html" class="navbar-brand">
+                <img src="bird.png" alt="HALCYON">
+                <span class="navbar-brand-text">HALCYON</span>
+            </a>
+            <div class="navbar-actions">
+                <a href="index.html" class="btn btn-secondary">Back to Store</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="page-container">
+            <a href="blogs.html" class="back-link">← Back to Blogs</a>
+            <div class="blog-detail-card">
+                <div id="blogDetail">
+                    <!-- Blog content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <a href="customersupport.html" class="floating-support-btn" title="Customer Support">
+        💬
+    </a>
+
+    <script>
+        const blogs = [
+            {
+                id: 1,
+                title: "The Latest Fashion Trends for 2024",
+                category: "fashion",
+                date: "March 15, 2024",
+                author: "Sarah Johnson",
+                image: "https://picsum.photos/seed/blog1/800/400",
+                content: `
+                    <h2>Introduction</h2>
+                    <p>As we step into 2024, the fashion world is buzzing with exciting new trends that are set to redefine style. From sustainable fashion to bold patterns, this year promises to be a game-changer in the world of style.</p>
+                    
+                    <h2>Sustainable Fashion</h2>
+                    <p>The push for sustainability continues to grow stronger in 2024. More brands are embracing eco-friendly materials and production methods. Look out for:</p>
+                    <ul>
+                        <li>Recycled fabrics and materials</li>
+                        <li>Zero-waste production techniques</li>
+                        <li>Vegan leather alternatives</li>
+                        <li>Upcycled vintage pieces</li>
+                    </ul>
+                    
+                    <h2>Bold Patterns and Colors</h2>
+                    <p>This year, fashion is all about making a statement. Expect to see:</p>
+                    <ul>
+                        <li>Vibrant color combinations</li>
+                        <li>Geometric patterns</li>
+                        <li>Abstract prints</li>
+                        <li>Mixed textures</li>
+                    </ul>
+                    
+                    <h2>Conclusion</h2>
+                    <p>2024 is shaping up to be an exciting year for fashion, with sustainability and bold expression taking center stage. Whether you're updating your wardrobe or just staying informed, these trends are worth watching.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "Sustainable Living: A Complete Guide",
+                category: "lifestyle",
+                date: "March 10, 2024",
+                author: "Michael Chen",
+                image: "https://picsum.photos/seed/blog2/800/400",
+                content: `
+                    <h2>Why Sustainable Living Matters</h2>
+                    <p>Sustainable living is no longer just a trend - it's a necessity. Our planet's resources are finite, and it's up to us to make conscious choices that reduce our environmental impact.</p>
+                    
+                    <h2>Simple Steps to Start</h2>
+                    <p>Here are some easy ways to incorporate sustainability into your daily life:</p>
+                    <ol>
+                        <li>Reduce single-use plastics</li>
+                        <li>Conserve water and energy</li>
+                        <li>Support local and sustainable businesses</li>
+                        <li>Practice mindful consumption</li>
+                    </ol>
+                    
+                    <h2>Sustainable Shopping Tips</h2>
+                    <p>When shopping, consider these factors:</p>
+                    <ul>
+                        <li>Look for eco-friendly certifications</li>
+                        <li>Choose quality over quantity</li>
+                        <li>Support brands with sustainable practices</li>
+                        <li>Consider second-hand options</li>
+                    </ul>
+                `
+            },
+            {
+                id: 3,
+                title: "Top 10 Shopping Tips for Smart Buyers",
+                category: "tips",
+                date: "March 5, 2024",
+                author: "Emily Davis",
+                image: "https://picsum.photos/seed/blog3/800/400",
+                content: `
+                    <h2>Smart Shopping Strategies</h2>
+                    <p>Becoming a smart shopper isn't just about finding the best deals - it's about making informed decisions that benefit both your wallet and your lifestyle.</p>
+                    
+                    <h2>Essential Tips</h2>
+                    <ol>
+                        <li>Always compare prices across different platforms</li>
+                        <li>Read product reviews thoroughly</li>
+                        <li>Check return policies before purchasing</li>
+                        <li>Look for seasonal sales and promotions</li>
+                        <li>Consider the total cost of ownership</li>
+                        <li>Use price tracking tools</li>
+                        <li>Sign up for loyalty programs</li>
+                        <li>Follow your favorite brands on social media</li>
+                        <li>Use cashback and reward programs</li>
+                        <li>Keep track of your purchases</li>
+                    </ol>
+                    
+                    <h2>Making the Most of Your Budget</h2>
+                    <p>Remember that smart shopping isn't just about spending less - it's about getting the best value for your money while making purchases that align with your needs and values.</p>
+                `
+            },
+            {
+                id: 4,
+                title: "Spring Collection Preview",
+                category: "fashion",
+                date: "March 1, 2024",
+                author: "David Wilson",
+                image: "https://picsum.photos/seed/blog4/800/400",
+                content: `
+                    <h2>Welcome to Spring 2024</h2>
+                    <p>Our new spring collection brings fresh energy and vibrant colors to your wardrobe. This season, we're focusing on versatile pieces that transition seamlessly from day to night.</p>
+                    
+                    <h2>Key Pieces</h2>
+                    <p>Here are the must-have items from our spring collection:</p>
+                    <ul>
+                        <li>Lightweight trench coats</li>
+                        <li>Floral print dresses</li>
+                        <li>Pastel-colored blazers</li>
+                        <li>Wide-leg trousers</li>
+                        <li>Statement accessories</li>
+                    </ul>
+                    
+                    <h2>Styling Tips</h2>
+                    <p>Make the most of your spring wardrobe with these styling suggestions:</p>
+                    <ol>
+                        <li>Layer lightweight pieces for changing temperatures</li>
+                        <li>Mix patterns and textures for visual interest</li>
+                        <li>Accessorize with bold, colorful pieces</li>
+                        <li>Transition winter pieces with spring colors</li>
+                    </ol>
+                    
+                    <h2>Conclusion</h2>
+                    <p>Our spring collection is designed to bring joy and versatility to your wardrobe. Each piece is crafted with care and attention to detail, ensuring you look and feel your best this season.</p>
+                `
+            }
+        ];
+
+        function loadBlogDetail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const blogId = parseInt(urlParams.get('id'));
+            const blog = blogs.find(b => b.id === blogId);
+            const blogDetail = document.getElementById('blogDetail');
+
+            if (blog) {
+                blogDetail.innerHTML = `
+                    <div class="blog-header">
+                        <h1 class="blog-title">${blog.title}</h1>
+                        <div class="blog-meta">
+                            <span>${blog.date}</span>
+                            <span>By ${blog.author}</span>
+                            <span>Category: ${blog.category}</span>
+                        </div>
+                    </div>
+                    <img src="${blog.image}" alt="${blog.title}" class="blog-image">
+                    <div class="blog-content">
+                        ${blog.content}
+                    </div>
+                `;
+            } else {
+                blogDetail.innerHTML = `
+                    <div class="error-message">
+                        <h2>Blog not found</h2>
+                        <p>The blog you're looking for doesn't exist or has been removed.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Load the blog detail when the page loads
+        window.onload = loadBlogDetail;
+    </script>
+</body>
+</html> 
