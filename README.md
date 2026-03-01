@@ -1,5 +1,7 @@
 # HALCYON
 
+![HALCYON](HALCYON-Frontend/bird.png)
+
 A full-stack e-commerce web application with a React frontend and Node.js/Express backend.
 
 ## Project Structure
